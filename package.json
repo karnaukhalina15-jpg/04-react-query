@@ -1,20 +1,22 @@
 {
-  "name": "03-react-movies",
+  "name": "04-react-query",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build 04-react-query",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
     "axios": "^1.18.1",
     "modern-normalize": "^3.0.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-hot-toast": "^2.6.0"
+    "react-hot-toast": "^2.6.0",
+    "react-paginate": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

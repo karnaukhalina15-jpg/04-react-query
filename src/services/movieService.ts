@@ -17,7 +17,12 @@ export interface FetchMoviesResponse {
   total_results: number;
 }
 
-export const fetchMovies = async (query: string): Promise<Movie[]> => {
+// 1. Додаємо другий параметр page (за замовчуванням 1)
+// 2. Змінюємо тип повернення на Promise<FetchMoviesResponse>
+export const fetchMovies = async (
+  query: string,
+  page: number = 1,
+): Promise<FetchMoviesResponse> => {
   const response = await movieInstance.get<FetchMoviesResponse>(
     "/search/movie",
     {
@@ -25,9 +30,11 @@ export const fetchMovies = async (query: string): Promise<Movie[]> => {
         query,
         include_adult: false,
         language: "en-US",
-        page: 1,
+        page, // 3. Передаємо поточну сторінку в параметри запиту
       },
     },
   );
-  return response.data.results;
+
+  // 4. Повертаємо весь об'єкт response.data, а не тільки results
+  return response.data;
 };
