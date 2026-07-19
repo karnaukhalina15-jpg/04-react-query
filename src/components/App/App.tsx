@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import toast from "react-hot-toast";
@@ -31,15 +32,13 @@ export const App: React.FC = () => {
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
-    enabled: query !== "", // Робимо запит лише тоді, коли введено текст пошуку
-    placeholderData: keepPreviousData, // Зберігає старі фільми під час переходу по сторінках
+    enabled: query !== "",
+    placeholderData: keepPreviousData,
   });
 
-  // 3. Витягуємо дані з відповіді бекенду TMDB
   const movies = data?.results ?? [];
   const totalPages = data?.total_pages ?? 0;
 
-  // 4. Функція для нового пошуку (скидає сторінку на першу)
   const handleSearchSubmit = (newQuery: string) => {
     if (!newQuery.trim()) {
       toast.error("Please enter a search term.");
@@ -57,10 +56,11 @@ export const App: React.FC = () => {
     setSelectedMovie(null);
   };
 
-  // Показуємо тост, якщо пошук успішно завершився, але нічого не знайдено
-  if (isSuccess && movies.length === 0 && query !== "") {
-    toast.error("No movies found for your request.", { id: "no-movies" });
-  }
+  useEffect(() => {
+    if (isSuccess && movies.length === 0 && query) {
+      toast("No movies found");
+    }
+  }, [isSuccess, movies.length, query]);
 
   return (
     <div>
@@ -69,7 +69,6 @@ export const App: React.FC = () => {
       {isLoading && <Loader />}
       {isError && <ErrorMessage />}
 
-      {/* Пагінація рендериться лише якщо сторінок більше ніж 1 */}
       {isSuccess && totalPages > 1 && (
         <ReactPaginate
           pageCount={totalPages}
