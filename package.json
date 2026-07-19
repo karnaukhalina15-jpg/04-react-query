@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build 04-react-query",
+    "build": "04-react-query",
     "lint": "oxlint",
     "preview": "vite preview"
   },
